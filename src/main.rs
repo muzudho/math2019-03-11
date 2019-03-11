@@ -25,6 +25,32 @@ fn main() {
     let a_sum = sum(&a_index, &a_kuku, a_text.len() * 2 - 1);
     let b_sum = sum(&b_index, &b_kuku, b_text.len() * 2 - 1);
     let c_sum = sum(&c_index, &c_kuku, c_text.len() * 2 - 1);
+
+    let a_a_text = accumulate(&a_sum);
+    let b_b_text = accumulate(&b_sum);
+    let c_c_text = accumulate(&c_sum);
+    println!("a_a_text {}", a_a_text);
+    println!("b_b_text {}", b_b_text);
+    println!("c_c_text {}", c_c_text);
+}
+
+// 桁がでかいので、文字列にして返すぜ☆（*＾～＾*）
+fn accumulate(a_sum:&Vec<i32>) -> String {
+    let mut number_text = "".to_string();
+
+    let mut cumulus = 0;
+    for num in a_sum {
+        cumulus += num;
+        number_text = format!("{}{}", cumulus % 10, number_text);
+        cumulus /= 10;
+    }
+
+    while cumulus > 0 {
+        number_text = format!("{}{}", cumulus % 10, number_text);
+        cumulus /= 10;
+    }
+
+    number_text
 }
 
 fn sum(a_index:&Vec<i8>, a_kuku:&Vec<i8>, capacity:usize) -> Vec<i32> {
@@ -39,9 +65,13 @@ fn sum(a_index:&Vec<i8>, a_kuku:&Vec<i8>, capacity:usize) -> Vec<i32> {
         vec[index as usize] = n;
     }
 
-    print!(" Naname sum ");
+    println!(" Naname sum.");
     for column in 0..vec.len() {
-        print!("{:>3} ", vec[vec.len()-column-1]);
+        for _indent in 0..column {
+            print!(" ");
+        }
+        print!("{:>3}", vec[vec.len()-column-1]);
+        println!();
     }
     println!();
 
