@@ -13,16 +13,29 @@ fn main() {
 }
 
 fn power2(a:Vec<i8>) {
-    for i in 0..a.len() {
-        print!("{:>3}", a[a.len()-i-1]);
+    print!("   ");
+    for column in 0..a.len() {
+        print!("{:>3}", a[a.len()-column-1]);
     }
     println!();
 
-    for i in 0..a.len() {
-        for j in 0..a.len() {
-        
+    /*
+    for row in 0..a.len() {
+        print!("{:>3}", a[row]);
+        for column in 0..a.len() {
+            print!("{:>3}", a[row] * a[a.len()-column-1]);    
         }
+        println!();
     }
+     */
+    for row in 0..a.len() {
+        print!("{:>3}", a[row]);
+        for column in 0..a.len() {
+            print!("{:>3}", row + (a.len() - column - 1));
+        }
+        println!();
+    }
+    println!();
 }
 
 fn divide(numbers:&str) -> Vec<i8> {
