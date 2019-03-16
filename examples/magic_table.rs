@@ -16,5 +16,11 @@ use math2019_03_11::*;
 use math2019_03_11::handy_number::*;
 
 fn main() {
+    // 外和用テーブル
+    println!("\nExternul sum.");
+    create_regular_table();
+
+    // 内和用テーブル
+    println!("\nInternul sum.");
     create_magic_table();
 }

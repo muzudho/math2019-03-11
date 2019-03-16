@@ -92,76 +92,119 @@ pub fn create_none_row() -> Vec<i8> {
     println!();
     axis
 }
-pub fn create_magic_top_half_row(base:i8) -> Vec<i8> {
+pub fn create_magic_top_half_row(y:i8) -> Vec<i8> {
     // 何やってるか見たいときはプリントしろだぜ☆（＾～＾）
     let mut axis = Vec::new();
 
-    print!("{:>3}|", 10+base);
+    print!("{:>3}|", y);
 
-    axis.push((0+base)%10);
-    print!("{:>3}", axis[axis.len()-1]);
-    for x in 1..=9 {
-        axis.push((base-x)%10);
+    for i in 0..9 {
+        // 第２象限は補数にする。
+        let nega_x = i - 9;
+        let num = (nega_x+y)%10;
+        let com = (10 - num)%10;
+        axis.push(com);
         print!("{:>3}", axis[axis.len()-1]);
     }
 
-    // axis.push(0);    
-    // print!("{:>3}", axis[axis.len()-1]);
-    // print!("---");
-    
-    for x in 1..=10 {
-        axis.push((x+base+9)%10);
+    for x in 0..=9 {
+        axis.push((x+y)%10);
         print!("{:>3}", axis[axis.len()-1]);
     }
 
     println!();
     axis
 }
-pub fn create_magic_bottom_half_row(base:i8) -> Vec<i8> {
+pub fn create_magic_bottom_half_row(nega_y:i8) -> Vec<i8> {
     // 何やってるか見たいときはプリントしろだぜ☆（＾～＾）
     let mut axis = Vec::new();
 
-    print!("{:>3}|", 10+base);
+    print!("{:>3}|", nega_y);
 
-    axis.push((0+base-9)%10);
-    print!("{:>3}", axis[axis.len()-1]);
-    for x in 1..=9 {
-        axis.push((x+base-9)%10);
+    for i in 0..9 {
+        let nega_x = i - 9;
+        let com_x = 10 + nega_x;
+        axis.push((nega_x+nega_y)%10);
         print!("{:>3}", axis[axis.len()-1]);
     }
 
-    // axis.push(0);
-    // print!("{:>3}", axis[axis.len()-1]);
-    // print!("---");
-
-    for x in 1..=10 {
-        axis.push(((-base+x)%10-10)%10);
+    for x in 0..=9 {
+        // 第４象限は補数にする。
+        let num = (x+nega_y)%10;
+        let com = (10 - num)%10;
+        axis.push(com);
         print!("{:>3}", axis[axis.len()-1]);
     }
 
     println!();
     axis
 }
+// 内和用。
 pub fn create_magic_table() {
     print!("   |");
     for x in -9..=0 {
         print!("{:>3}", x);
     }
-    for x in 0..=9 {
+    for x in 1..=9 {
         print!("{:>3}", x);
     }
     println!();
 
     print!("   +");
-    for x in -9..=10 {
+    for x in -9..=9 {
         print!(" --");
     }
     println!();
 
-    for y in 11..=20 {
+    for y in 1..=10 {
         create_magic_top_half_row(10-y);
     }
-    for y in 10..=19 {
+    for y in 1..=9 {
         create_magic_bottom_half_row(-y);
+    }
+}
+
+pub fn create_regular_row(y:i8) -> Vec<i8> {
+    // 何やってるか見たいときはプリントしろだぜ☆（＾～＾）
+    let mut axis = Vec::new();
+
+    print!("{:>3}|", y);
+
+    for i in 0..=8 {
+        let x = -9 + i;
+        axis.push((x+y)%10);
+        print!("{:>3}", axis[axis.len()-1]);
+    }
+    
+    for x in 0..=9 {
+        axis.push((x+y)%10);
+        print!("{:>3}", axis[axis.len()-1]);
+    }
+
+    println!();
+    axis
+}
+/// 外和用。
+pub fn create_regular_table() {
+    print!("   |");
+    for x in -9..=0 {
+        print!("{:>3}", x);
+    }
+    for x in 1..=9 {
+        print!("{:>3}", x);
+    }
+    println!();
+
+    print!("   +");
+    for x in -9..=9 {
+        print!(" --");
+    }
+    println!();
+
+    for y in 0..=9 {
+        create_regular_row(9-y);
+    }
+    for y in 1..=9 {
+        create_regular_row(-y);
     }
 }
