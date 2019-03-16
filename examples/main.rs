@@ -100,24 +100,20 @@ fn main()
     println!("aaa_text  : {}", aaa_text);
     println!("bbb_text  : {}", bbb_text);
     let d_num = aaa_num.subtract(&bbb_num);
-    let (positive_sign, d_text) = &d_num.to_string();
-    println!("a - b     = {}{} (d)", to_sign_string(*positive_sign), d_text);
+    println!("a - b     = {} (d)", d_num.to_string());
     // println!("expected  =  20483367622797158223817952754905569383153664033");
     println!("ccc_text  :  {}", ccc_text);
     let e_num = d_num.subtract(&ccc_num);
-    let (positive_sign, e_text) = &e_num.to_string();
-    println!("d - c     = {}{}", to_sign_string(*positive_sign), e_text);
+    println!("d - c     = {}", e_num.to_string());
 
     // a - c - b ☆（＾～＾）
     println!("\nLets's a - c - b ☆（＾～＾）");
     println!("aaa_text  : {}", aaa_text);
     println!("ccc_text  :  {}", ccc_text);
     let f_num = aaa_num.subtract(&ccc_num);
-    let (positive_sign, f_text) = &f_num.to_string();
-    println!("a - c     = {}{} (f)", to_sign_string(*positive_sign), f_text);
+    println!("a - c     = {} (f)", f_num.to_string());
     // println!("expected  = 676467453392982277424361019810585360331722557952");
     println!("bbb_text  : {}", bbb_text);
     let g_num = f_num.subtract(&bbb_num);
-    let (positive_sign, g_text) = &g_num.to_string();
-    println!("f - b     = {}{}", to_sign_string(*positive_sign), g_text);
+    println!("f - b     = {}", g_num.to_string());
 }

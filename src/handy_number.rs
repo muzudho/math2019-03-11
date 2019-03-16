@@ -40,7 +40,7 @@ impl HandyNumber {
     }
 
     // 数字の一列を、文字列にして返すぜ☆（*＾～＾*） 符号は別にして返す☆（＾ｑ＾）
-    pub fn to_string(&self) -> (bool, String) {
+    fn to_string_parts(&self) -> (bool, String) {
         let mut number_text = "".to_string();
 
         for num in self.numbers.iter() {
@@ -48,6 +48,11 @@ impl HandyNumber {
         }
 
         (self.positive, number_text)
+    }
+
+    pub fn to_string(&self) -> String {
+        let (positive, text) = self.to_string_parts();
+        format!("{}{}", if positive {"".to_string()} else {"-".to_string()}, text)
     }
 
     // 掛け算☆（＾～＾）

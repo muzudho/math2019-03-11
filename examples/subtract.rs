@@ -12,7 +12,6 @@
 /// ```
 extern crate math2019_03_11;
 
-use math2019_03_11::*;
 use math2019_03_11::handy_number::*;
 
 /// Test a subtract.
@@ -32,7 +31,6 @@ fn main()
     // a - b ☆（＾～＾）
     println!("\nLet's a - b ☆（＾～＾）");
     let c_num = a_num.subtract(&b_num);
-    let (positive_sign, c_text) = c_num.to_string();
-    println!("a - b     = {}{} (c)", to_sign_string(positive_sign) ,c_text);
+    println!("a - b     = {} (c)", c_num.to_string());
 
 }

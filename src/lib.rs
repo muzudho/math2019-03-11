@@ -69,8 +69,3 @@ pub fn create_index(a_num:&HandyNumber, b_num:&HandyNumber) -> Vec<i8> {
     // println!();
     vec
 }
-
-// 偽ならマイナスの符号を返すぜ☆（＾ｑ＾）
-pub fn to_sign_string(positive_sign:bool) -> String {
-    if positive_sign {"".to_string()} else {"-".to_string()}
-}
