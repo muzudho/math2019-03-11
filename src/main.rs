@@ -58,23 +58,38 @@ fn main() {
     let aaa_text = accumulate(&a_sum);
     let bbb_text = accumulate(&b_sum);
     let ccc_text = accumulate(&c_sum);
-    println!("aaa_text   {}", aaa_text);
-    println!("bbb_text   {}", bbb_text);
 
     // 引き算しようぜ☆（*＾～＾*）
     let aaa_num = to_digit_string(&aaa_text);
     let bbb_num = to_digit_string(&bbb_text);
+    let ccc_num = to_digit_string(&ccc_text);
 
+    // a - b - c ☆（＾～＾）
+    println!("a - b - c ☆（＾～＾）");
+    println!("aaa_text  : {}", aaa_text);
+    println!("bbb_text  : {}", bbb_text);
     let d_num = subtract(&aaa_num, &bbb_num);
     let d_text = to_string(&d_num);
-    println!("a - b    = {} (d)", d_text);
-    // println!("expected =  20483367622797158223817952754905569383153664033");
-
-    println!("ccc_text    {}", ccc_text);
-    let ccc_num = to_digit_string(&ccc_text);
+    println!("a - b     = {} (d)", d_text);
+    // println!("expected  =  20483367622797158223817952754905569383153664033");
+    println!("ccc_text  :  {}", ccc_text);
     let e_num = subtract(&d_num, &ccc_num);
     let e_text = to_string(&e_num);
-    println!("d - c    =  {}", e_text);
+    println!("d - c     = {}", e_text);
+
+    // a - c - b ☆（＾～＾）
+    println!();
+    println!("a - c - b ☆（＾～＾）");
+    println!("aaa_text  : {}", aaa_text);
+    println!("ccc_text  :  {}", ccc_text);
+    let f_num = subtract(&aaa_num, &ccc_num);
+    let f_text = to_string(&f_num);
+    println!("a - c     = {} (f)", f_text);
+    // println!("expected  = 676467453392982277424361019810585360331722557952");
+    println!("bbb_text  : {}", bbb_text);
+    let g_num = subtract(&f_num, &bbb_num);
+    let g_text = to_string(&g_num);
+    println!("f - b     = {}", g_text);
 }
 
 // 桁がでかいので、数字列のまま引き算するぜ☆（＾～＾）
@@ -106,30 +121,50 @@ fn subtract(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
     println!("short_text = {}", short_text);
      */
 
-    let short_len = cmp::min(a_num.len(), b_num.len());
     let mut vec = Vec::new();
 
     // 下の桁から計算。
+    let short_len = cmp::min(a_num.len(), b_num.len());
     let mut cumulus = 0;
-    for column in 0..short_len{
-        let long_n = if column < long_num.len() {long_num[column]} else {0};
+    for column in 0..short_len {
+        let mut long_n = if column < long_num.len() {long_num[column]} else {0};
         let short_n = if column < short_num.len() {short_num[column]} else {0};
+
+        // 下の桁が、前借りしたせいで long_n様の数が 1 減ることになるとはな☆（＾～＾）
+        if cumulus < 0 {
+            long_n += cumulus;
+            cumulus = 0;
+        }
 
         // 各桁は 絶対値にして計算する。
         // 長い方から、短い方を引く。
         let c = if long_n < short_n {
             // 引けなければ、上の桁から 1 を前借りして１０を足す☆（＾～＾）
-            let c = (10 + long_n.abs() + cumulus) - short_n.abs();
+            let c = (10 + long_n.abs()) - short_n.abs();
             cumulus = -1;
             c
         } else {
-            let c = (long_n.abs() + cumulus) - short_n.abs();
-            cumulus = 0;
+            let c = (long_n.abs()) - short_n.abs();
             c
         };
 
-        // println!("{} = {} - {}", c, long_n, short_n);
+        // println!("{} = {} - {}", c, long_n.abs(), short_n.abs());
         vec.push(c);
+    }
+
+    // 大きな桁の残ってる桁を最後に付けろだぜ☆（＾～＾）
+    let long_len = cmp::max(a_num.len(), b_num.len());
+    for column in short_len..long_len {
+        let mut long_n = long_num[column];
+
+        // 下の桁が、前借りしたせいで long_n様の数が 1 減ることになるとはな☆（＾～＾）
+        if cumulus < 0 {
+            long_n += cumulus;
+            // cumulus = 0;
+        }
+
+        // println!("L {}", long_n);
+        vec.push(long_n);
     }
 
     vec
