@@ -69,3 +69,99 @@ pub fn create_index(a_num:&HandyNumber, b_num:&HandyNumber) -> Vec<i8> {
     // println!();
     vec
 }
+
+pub fn create_zero_row() -> Vec<i8> {
+    let mut axis = Vec::new();
+
+    for x in 1..=21 {
+        axis.push(0);
+        print!("{:>3}", axis[axis.len()-1]);
+    }
+
+    println!();
+    axis
+}
+pub fn create_none_row() -> Vec<i8> {
+    let mut axis = Vec::new();
+
+    for x in 1..=21 {
+        axis.push(0);
+        print!("---");
+    }
+
+    println!();
+    axis
+}
+pub fn create_magic_top_half_row(base:i8) -> Vec<i8> {
+    // 何やってるか見たいときはプリントしろだぜ☆（＾～＾）
+    let mut axis = Vec::new();
+
+    print!("{:>3}|", 10+base);
+
+    axis.push((0+base)%10);
+    print!("{:>3}", axis[axis.len()-1]);
+    for x in 1..=9 {
+        axis.push((base-x)%10);
+        print!("{:>3}", axis[axis.len()-1]);
+    }
+
+    // axis.push(0);    
+    // print!("{:>3}", axis[axis.len()-1]);
+    // print!("---");
+    
+    for x in 1..=10 {
+        axis.push((x+base+9)%10);
+        print!("{:>3}", axis[axis.len()-1]);
+    }
+
+    println!();
+    axis
+}
+pub fn create_magic_bottom_half_row(base:i8) -> Vec<i8> {
+    // 何やってるか見たいときはプリントしろだぜ☆（＾～＾）
+    let mut axis = Vec::new();
+
+    print!("{:>3}|", 10+base);
+
+    axis.push((0+base-9)%10);
+    print!("{:>3}", axis[axis.len()-1]);
+    for x in 1..=9 {
+        axis.push((x+base-9)%10);
+        print!("{:>3}", axis[axis.len()-1]);
+    }
+
+    // axis.push(0);
+    // print!("{:>3}", axis[axis.len()-1]);
+    // print!("---");
+
+    for x in 1..=10 {
+        axis.push(((-base+x)%10-10)%10);
+        print!("{:>3}", axis[axis.len()-1]);
+    }
+
+    println!();
+    axis
+}
+pub fn create_magic_table() {
+    print!("   |");
+    for x in -9..=0 {
+        print!("{:>3}", x);
+    }
+    for x in 0..=9 {
+        print!("{:>3}", x);
+    }
+    println!();
+
+    print!("   +");
+    for x in -9..=10 {
+        print!(" --");
+    }
+    println!();
+
+    for y in 11..=20 {
+        create_magic_top_half_row(10-y);
+    }
+    for y in 10..=19 {
+        create_magic_bottom_half_row(-y);
+    }
+}
