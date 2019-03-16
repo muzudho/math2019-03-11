@@ -15,6 +15,9 @@ extern crate math2019_03_11;
 
 use math2019_03_11::*;
 
+/// a^3 + b^3 + c^3 = 33
+/// (8866128975287528)^3 + (-8778405442862239)^3 + (-2736111468807040)^3 = 33
+/// を検算するぜ☆（＾～＾）
 fn main()
 {
     // 文字にするぜ☆（＾～＾）
@@ -95,25 +98,25 @@ fn main()
     println!("\nLet's a - b - c ☆（＾～＾）");
     println!("aaa_text  : {}", aaa_text);
     println!("bbb_text  : {}", bbb_text);
-    let d_num = subtract(&aaa_num, &bbb_num);
-    let d_text = to_string(&d_num);
-    println!("a - b     = {} (d)", d_text);
+    let (positive_sign, d_num) = subtract(&aaa_num, &bbb_num);
+    let (positive_sign, d_text) = to_string(positive_sign, &d_num);
+    println!("a - b     = {}{} (d)", to_sign_string(positive_sign), d_text);
     // println!("expected  =  20483367622797158223817952754905569383153664033");
     println!("ccc_text  :  {}", ccc_text);
-    let e_num = subtract(&d_num, &ccc_num);
-    let e_text = to_string(&e_num);
-    println!("d - c     = {}", e_text);
+    let (positive_sign, e_num) = subtract(&d_num, &ccc_num);
+    let (positive_sign, e_text) = to_string(positive_sign, &e_num);
+    println!("d - c     = {}{}", to_sign_string(positive_sign), e_text);
 
     // a - c - b ☆（＾～＾）
     println!("\nLets's a - c - b ☆（＾～＾）");
     println!("aaa_text  : {}", aaa_text);
     println!("ccc_text  :  {}", ccc_text);
-    let f_num = subtract(&aaa_num, &ccc_num);
-    let f_text = to_string(&f_num);
-    println!("a - c     = {} (f)", f_text);
+    let (positive_sign, f_num) = subtract(&aaa_num, &ccc_num);
+    let (positive_sign, f_text) = to_string(positive_sign, &f_num);
+    println!("a - c     = {}{} (f)", to_sign_string(positive_sign), f_text);
     // println!("expected  = 676467453392982277424361019810585360331722557952");
     println!("bbb_text  : {}", bbb_text);
-    let g_num = subtract(&f_num, &bbb_num);
-    let g_text = to_string(&g_num);
-    println!("f - b     = {}", g_text);
+    let (positive_sign, g_num) = subtract(&f_num, &bbb_num);
+    let (positive_sign, g_text) = to_string(positive_sign, &g_num);
+    println!("f - b     = {}{}", to_sign_string(positive_sign), g_text);
 }
