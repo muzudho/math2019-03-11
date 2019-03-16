@@ -13,6 +13,8 @@
 
 extern crate math2019_03_11;
 
+use math2019_03_11::*;
+
 fn main()
 {
     // 文字にするぜ☆（＾～＾）

@@ -108,7 +108,7 @@ fn main() {
 */
 
 // 桁がでかいので、数字列のまま引き算するぜ☆（＾～＾）
-fn subtract(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
+pub fn subtract(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
 
     // 桁数がでかい方がえらい☆（＾～＾）
     let long_num;
@@ -200,7 +200,7 @@ fn subtract(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
 }
 
 // 桁がでかいので、文字列にして返すぜ☆（*＾～＾*）
-fn accumulate(a_sum:&Vec<i32>) -> String {
+pub fn accumulate(a_sum:&Vec<i32>) -> String {
     let mut number_text = "".to_string();
 
     let mut cumulus = 0;
@@ -218,7 +218,7 @@ fn accumulate(a_sum:&Vec<i32>) -> String {
     number_text
 }
 
-fn sum(a_index:&Vec<i8>, a_kuku:&Vec<i8>, capacity:usize) -> Vec<i32> {
+pub fn sum(a_index:&Vec<i8>, a_kuku:&Vec<i8>, capacity:usize) -> Vec<i32> {
     let mut vec : Vec<i32> = Vec::with_capacity(capacity);
     for _i in 0..capacity {
         vec.push(0);
@@ -244,7 +244,7 @@ fn sum(a_index:&Vec<i8>, a_kuku:&Vec<i8>, capacity:usize) -> Vec<i32> {
 }
 
 // 掛け算☆（＾～＾）
-fn multiplied_by(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
+pub fn multiplied_by(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
     // 何やってるか見たいときはプリントしろだぜ☆（＾～＾）
     print!("   ");
     for column in 0..b_num.len() {
@@ -266,7 +266,7 @@ fn multiplied_by(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
     vec
 }
 
-fn create_index(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
+pub fn create_index(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
     // 何やってるか見たいときはプリントしろだぜ☆（＾～＾）
     /*
     print!("   ");
@@ -291,7 +291,7 @@ fn create_index(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
 }
 
 // 数字の一列を、文字列にして返すぜ☆（*＾～＾*）
-fn to_string(a_sum:&Vec<i8>) -> String {
+pub fn to_string(a_sum:&Vec<i8>) -> String {
     let mut number_text = "".to_string();
 
     for num in a_sum {
@@ -302,7 +302,7 @@ fn to_string(a_sum:&Vec<i8>) -> String {
 }
 
 // 数字の一列にするぜ☆（＾～＾） 下の桁から配列に入れている☆（*＾～＾*）
-fn to_digit_string(numbers:&str) -> Vec<i8> {
+pub fn to_digit_string(numbers:&str) -> Vec<i8> {
     let mut vec = Vec::new();
     for number_char in numbers.chars().rev() {
         let num: i8 = number_char.to_string().parse().unwrap();
