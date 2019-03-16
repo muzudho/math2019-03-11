@@ -1,7 +1,11 @@
+mod handy_number;
+
 use std::cmp;
+use handy_number::*;
+
 
 // 桁がでかいので、数字列のまま引き算するぜ☆（＾～＾）
-pub fn subtract(a_num:&Vec<i8>, b_num:&Vec<i8>) -> (bool, Vec<i8>) {
+pub fn subtract(a_num:&HandyNumber, b_num:&HandyNumber) -> HandyNumber {
 
     // 桁数がでかい方がえらい☆（＾～＾）
     let mut swapping = false;
@@ -16,7 +20,7 @@ pub fn subtract(a_num:&Vec<i8>, b_num:&Vec<i8>) -> (bool, Vec<i8>) {
         short_num = b_num;
     } else {
         let len = a_num.len();
-        if a_num[len-1] < b_num[len-1] {
+        if a_num.get_figure(len-1) < b_num.get_figure(len-1) {
             long_num = b_num;
             short_num = a_num;
             swapping = true;
@@ -39,8 +43,8 @@ pub fn subtract(a_num:&Vec<i8>, b_num:&Vec<i8>) -> (bool, Vec<i8>) {
     let mut bollow = false;
     for column in 0..short_len {
         let pre_bollow = bollow;
-        let mut long_n = if column < long_num.len() {long_num[column]} else {0};
-        let short_n = if column < short_num.len() {short_num[column]} else {0};
+        let mut long_n = if column < long_num.len() {long_num.get_figure(column)} else {0};
+        let short_n = if column < short_num.len() {short_num.get_figure(column)} else {0};
 
         // 下の桁が、前借りしたせいで long_n様の数が 1 減ることになるとはな☆（＾～＾）
         let mut carry_payment = 0;
@@ -68,7 +72,7 @@ pub fn subtract(a_num:&Vec<i8>, b_num:&Vec<i8>) -> (bool, Vec<i8>) {
     // 大きな桁の残ってる桁を最後に付けろだぜ☆（＾～＾）
     let long_len = cmp::max(a_num.len(), b_num.len());
     for column in short_len..long_len {
-        let mut long_n = long_num[column];
+        let mut long_n = long_num.get_figure(column);
 
         // 下の桁が、前借りしたせいで long_n様の数が 1 減ることになるとはな☆（＾～＾）
         if bollow {
@@ -93,7 +97,10 @@ pub fn subtract(a_num:&Vec<i8>, b_num:&Vec<i8>) -> (bool, Vec<i8>) {
     }
 
     // スワッピングしてたら、符号はマイナスだぜ☆（＾～＾）
-    (!swapping, vec)
+    HandyNumber {
+        positive: !swapping,
+        numbers: vec,
+    }
 }
 
 // 桁がでかいので、文字列にして返すぜ☆（*＾～＾*）
@@ -115,7 +122,7 @@ pub fn accumulate(a_sum:&Vec<i32>) -> String {
     number_text
 }
 
-pub fn sum(a_index:&Vec<i8>, a_kuku:&Vec<i8>, capacity:usize) -> Vec<i32> {
+pub fn sum(a_index:&Vec<i8>, a_kuku:&HandyNumber, capacity:usize) -> Vec<i32> {
     let mut vec : Vec<i32> = Vec::with_capacity(capacity);
     for _i in 0..capacity {
         vec.push(0);
@@ -123,7 +130,7 @@ pub fn sum(a_index:&Vec<i8>, a_kuku:&Vec<i8>, capacity:usize) -> Vec<i32> {
 
     for i in 0..a_index.len() {
         let index = a_index[i] as usize;
-        let n = vec[index] + a_kuku[i] as i32;
+        let n = vec[index] + a_kuku.get_figure(i) as i32;
         vec[index as usize] = n;
     }
 
@@ -141,29 +148,33 @@ pub fn sum(a_index:&Vec<i8>, a_kuku:&Vec<i8>, capacity:usize) -> Vec<i32> {
 }
 
 // 掛け算☆（＾～＾）
-pub fn multiplied_by(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
+pub fn multiplied_by(a_num:&HandyNumber, b_num:&HandyNumber) -> HandyNumber {
     // 何やってるか見たいときはプリントしろだぜ☆（＾～＾）
     print!("   ");
     for column in 0..b_num.len() {
-        print!("{:>3}", b_num[b_num.len()-column-1]);
+        print!("{:>3}", b_num.get_figure(b_num.len()-column-1));
     }
     println!();
 
     let mut vec = Vec::new();
     for row in 0..a_num.len() {
-        print!("{:>3}", a_num[row]);
+        print!("{:>3}", a_num.get_figure(row));
         for column in 0..b_num.len() {
-            let n = a_num[row] * b_num[b_num.len()-column-1];
+            let n = a_num.get_figure(row) * b_num.get_figure(b_num.len()-column-1);
             vec.push(n);
             print!("{:>3}", n);
         }
         println!();
     }
     println!();
-    vec
+
+    HandyNumber {
+        positive: !(a_num.positive ^ a_num.positive),
+        numbers: vec,
+    }
 }
 
-pub fn create_index(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
+pub fn create_index(a_num:&HandyNumber, b_num:&HandyNumber) -> Vec<i8> {
     // 何やってるか見たいときはプリントしろだぜ☆（＾～＾）
     /*
     print!("   ");
@@ -188,25 +199,29 @@ pub fn create_index(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
 }
 
 // 数字の一列を、文字列にして返すぜ☆（*＾～＾*） 符号は別にして返す☆（＾ｑ＾）
-pub fn to_string(positive_sign:bool, a_sum:&Vec<i8>) -> (bool, String) {
+pub fn to_string(a_num:&HandyNumber) -> (bool, String) {
     let mut number_text = "".to_string();
 
-    for num in a_sum {
+    for num in a_num.numbers.iter() {
         number_text = format!("{}{}", num, number_text);
     }
 
-    (positive_sign, number_text)
+    (a_num.positive, number_text)
 }
 
 // 数字の一列にするぜ☆（＾～＾） 下の桁から配列に入れている☆（*＾～＾*）
-pub fn to_digit_string(numbers:&str) -> Vec<i8> {
+pub fn to_handy_number(positive:bool, numbers:&str) -> HandyNumber {
     let mut vec = Vec::new();
     for number_char in numbers.chars().rev() {
         let num: i8 = number_char.to_string().parse().unwrap();
         vec.push(num);
         // println!("{}", num);
     }
-    vec
+
+    HandyNumber {
+        positive: positive,
+        numbers: vec,
+    }
 }
 
 // 偽ならマイナスの符号を返すぜ☆（＾ｑ＾）

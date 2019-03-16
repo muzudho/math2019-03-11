@@ -25,13 +25,13 @@ fn main()
     // タイトル画面のような感じ☆（＾～＾）
     println!("\n{} - {}",a_text, b_text);
 
-    let a_num = to_digit_string(a_text);
-    let b_num = to_digit_string(b_text);
+    let a_num = to_handy_number(true, a_text);
+    let b_num = to_handy_number(true, b_text);
 
     // a - b ☆（＾～＾）
     println!("\nLet's a - b ☆（＾～＾）");
-    let (positive_sign, c_num) = subtract(&a_num, &b_num);
-    let (positive_sign, c_text) = to_string(positive_sign, &c_num);
+    let c_num = subtract(&a_num, &b_num);
+    let (positive_sign, c_text) = to_string(&c_num);
     println!("a - b     = {}{} (c)", to_sign_string(positive_sign) ,c_text);
 
 }
