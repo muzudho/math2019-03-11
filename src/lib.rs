@@ -70,6 +70,7 @@ pub fn create_index(a_num:&HandyNumber, b_num:&HandyNumber) -> Vec<i8> {
     vec
 }
 
+/*
 pub fn create_zero_row() -> Vec<i8> {
     let mut axis = Vec::new();
 
@@ -163,29 +164,75 @@ pub fn create_magic_table() {
         create_magic_bottom_half_row(-y);
     }
 }
+*/
 
-pub fn create_regular_row(y:i8) -> Vec<i8> {
-    // 何やってるか見たいときはプリントしろだぜ☆（＾～＾）
+pub fn create_internal_sum_top_half_row(y:i8) -> Vec<i8> {
     let mut axis = Vec::new();
 
     print!("{:>3}|", y);
 
-    for i in 0..=8 {
-        let x = -9 + i;
-        axis.push((x+y)%10);
+    // 第二象限は補数。
+    for i in 0..=9 {
+        let nega_x = -9 + i;
+        let num = (nega_x+y)%10;
+        let com = (10 - num.abs())%10;
+        axis.push(com);
         print!("{:>3}", axis[axis.len()-1]);
     }
     
+    // 第一象限は無い。
     for x in 0..=9 {
-        axis.push((x+y)%10);
+        axis.push(0);
+        print!("   ");
+    }
+
+    println!();
+    axis
+}
+pub fn create_internal_sum_center_row(y:i8) -> Vec<i8> {
+    let mut axis = Vec::new();
+
+    print!("{:>3}|", y);
+    for x in -9..=0 {
+        let num = (x as i8).abs();
+        let com = (10 - num)%10;
+        axis.push(com);
+        print!("{:>3}", com);
+    }
+    for x in 1..=9 {
+        let num = (x as i8).abs();
+        let com = (10 - num)%10;
+        axis.push(com);
+        print!("{:>3}", com);
+    }
+    println!();
+
+    axis
+}
+pub fn create_internal_sum_bottom_half_row(nega_y:i8) -> Vec<i8> {
+    let mut axis = Vec::new();
+
+    print!("{:>3}|", nega_y);
+
+    // 第三象限は無い。
+    for i in 0..=8 {
+        axis.push(0);
+        print!("   ");
+    }
+    
+    // 第４象限は補数。
+    for x in 0..=9 {
+        let num = (x + nega_y)%10;
+        let com = (10 - num.abs())%10;
+        axis.push(com);
         print!("{:>3}", axis[axis.len()-1]);
     }
 
     println!();
     axis
 }
-/// 外和用。
-pub fn create_regular_table() {
+// 内和用。
+pub fn create_internal_sum_table() {
     print!("   |");
     for x in -9..=0 {
         print!("{:>3}", x);
@@ -201,10 +248,96 @@ pub fn create_regular_table() {
     }
     println!();
 
-    for y in 0..=9 {
-        create_regular_row(9-y);
+    for y in 0..=8 {
+        create_internal_sum_top_half_row(9-y);
     }
+    create_internal_sum_center_row(0);
     for y in 1..=9 {
-        create_regular_row(-y);
+        create_internal_sum_bottom_half_row(-y);
+    }
+}
+
+pub fn create_external_sum_top_half_row(y:i8) -> Vec<i8> {
+    let mut axis = Vec::new();
+
+    print!("{:>3}|", y);
+
+    // 第二象限は無い。
+    for i in 0..=8 {
+        axis.push(0);
+        print!("   ");
+    }
+
+    // 第四象限。
+    for x in 0..=9 {
+        axis.push((x+y)%10);
+        print!("{:>3}", axis[axis.len()-1]);
+    }
+
+    println!();
+    axis
+}
+pub fn create_external_sum_center_row(y:i8) -> Vec<i8> {
+    let mut axis = Vec::new();
+
+    print!("{:>3}|", y);
+    for x in -9..=0 {
+        axis.push(x);
+        print!("{:>3}", x);
+    }
+    for x in 1..=9 {
+        axis.push(x);
+        print!("{:>3}", x);
+    }
+    println!();
+
+    axis
+}
+pub fn create_external_sum_bottom_half_row(y:i8) -> Vec<i8> {
+    // 何やってるか見たいときはプリントしろだぜ☆（＾～＾）
+    let mut axis = Vec::new();
+
+    print!("{:>3}|", y);
+
+    // 第三象限。
+    for i in 0..=9 {
+        let x = -9 + i;
+        let num = (x+y)%10;
+        axis.push(num);
+        print!("{:>3}", axis[axis.len()-1]);
+    }
+
+    // 第四象限は無い。 
+    for x in 0..=9 {
+        axis.push(0);
+        print!("   ");
+    }
+
+    println!();
+    axis
+}
+/// 外和用。
+pub fn create_external_sum_table() {
+    print!("   |");
+    for x in -9..=0 {
+        print!("{:>3}", x);
+    }
+    for x in 1..=9 {
+        print!("{:>3}", x);
+    }
+    println!();
+
+    print!("   +");
+    for x in -9..=9 {
+        print!(" --");
+    }
+    println!();
+
+    for y in 0..=8 {
+        create_external_sum_top_half_row(9-y);
+    }
+    create_external_sum_center_row(0);
+    for y in 1..=9 {
+        create_external_sum_bottom_half_row(-y);
     }
 }

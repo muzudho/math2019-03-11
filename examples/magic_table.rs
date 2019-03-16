@@ -18,9 +18,9 @@ use math2019_03_11::handy_number::*;
 fn main() {
     // 外和用テーブル
     println!("\nExternul sum.");
-    create_regular_table();
+    create_external_sum_table();
 
     // 内和用テーブル
     println!("\nInternul sum.");
-    create_magic_table();
+    create_internal_sum_table();
 }
