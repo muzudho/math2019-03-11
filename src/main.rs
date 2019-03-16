@@ -58,36 +58,80 @@ fn main() {
     let aaa_text = accumulate(&a_sum);
     let bbb_text = accumulate(&b_sum);
     let ccc_text = accumulate(&c_sum);
-    println!("aaa_text {}", aaa_text);
-    println!("bbb_text {}", bbb_text);
-    println!("ccc_text {}", ccc_text);
+    println!("aaa_text   {}", aaa_text);
+    println!("bbb_text   {}", bbb_text);
 
     // 引き算しようぜ☆（*＾～＾*）
     let aaa_num = to_digit_string(&aaa_text);
     let bbb_num = to_digit_string(&bbb_text);
+
+    let d_num = subtract(&aaa_num, &bbb_num);
+    let d_text = to_string(&d_num);
+    println!("a - b    = {} (d)", d_text);
+    // println!("expected =  20483367622797158223817952754905569383153664033");
+
+    println!("ccc_text    {}", ccc_text);
     let ccc_num = to_digit_string(&ccc_text);
-    let result = subtract(&aaa_num, &bbb_num);
-    let result_text = to_string(&result);
-    println!("result {}", result_text);
+    let e_num = subtract(&d_num, &ccc_num);
+    let e_text = to_string(&e_num);
+    println!("d - c    =  {}", e_text);
 }
 
 // 桁がでかいので、数字列のまま引き算するぜ☆（＾～＾）
 fn subtract(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
-    let len = cmp::max(a_num.len(), b_num.len());
+
+    // 桁数がでかい方がえらい☆（＾～＾）
+    let long_num;
+    let short_num;
+    if a_num.len() < b_num.len() {
+        long_num = b_num;
+        short_num = a_num;
+    } else if a_num.len() > b_num.len() {
+        long_num = a_num;
+        short_num = b_num;
+    } else {
+        let len = a_num.len();
+        if a_num[len-1] < b_num[len-1] {
+            long_num = b_num;
+            short_num = a_num;
+        } else {
+            long_num = a_num;
+            short_num = b_num;
+        }
+    }
+    /*
+    let long_text = to_string(long_num);
+    let short_text = to_string(short_num);
+    println!("long_text  = {}", long_text);
+    println!("short_text = {}", short_text);
+     */
+
+    let short_len = cmp::min(a_num.len(), b_num.len());
     let mut vec = Vec::new();
 
+    // 下の桁から計算。
     let mut cumulus = 0;
-    for column in 0..len{
-        // 下の桁から計算。
-        let index = len - column;
-        let a = if index < a_num.len() {a_num[index]} else {0};
-        let b = if index < b_num.len() {10-b_num[index]} else {10};
+    for column in 0..short_len{
+        let long_n = if column < long_num.len() {long_num[column]} else {0};
+        let short_n = if column < short_num.len() {short_num[column]} else {0};
 
-        let c = if b<a { (a+b-cumulus)%10} else {cumulus+=1; b};
+        // 各桁は 絶対値にして計算する。
+        // 長い方から、短い方を引く。
+        let c = if long_n < short_n {
+            // 引けなければ、上の桁から 1 を前借りして１０を足す☆（＾～＾）
+            let c = (10 + long_n.abs() + cumulus) - short_n.abs();
+            cumulus = -1;
+            c
+        } else {
+            let c = (long_n.abs() + cumulus) - short_n.abs();
+            cumulus = 0;
+            c
+        };
+
+        // println!("{} = {} - {}", c, long_n, short_n);
         vec.push(c);
-
-        if b<a {cumulus = 0;}
     }
+
     vec
 }
 
@@ -189,7 +233,7 @@ fn to_string(a_sum:&Vec<i8>) -> String {
     number_text
 }
 
-// 数字の一列にするぜ☆（＾～＾）
+// 数字の一列にするぜ☆（＾～＾） 下の桁から配列に入れている☆（*＾～＾*）
 fn to_digit_string(numbers:&str) -> Vec<i8> {
     let mut vec = Vec::new();
     for number_char in numbers.chars().rev() {
