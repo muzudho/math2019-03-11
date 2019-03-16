@@ -71,7 +71,7 @@ fn main() {
     let d_num = subtract(&aaa_num, &bbb_num);
     let d_text = to_string(&d_num);
     println!("a - b     = {} (d)", d_text);
-    // println!("expected  =  20483367622797158223817952754905569383153664033");
+    println!("expected  =  20483367622797158223817952754905569383153664033");
     println!("ccc_text  :  {}", ccc_text);
     let e_num = subtract(&d_num, &ccc_num);
     let e_text = to_string(&e_num);
@@ -85,7 +85,7 @@ fn main() {
     let f_num = subtract(&aaa_num, &ccc_num);
     let f_text = to_string(&f_num);
     println!("a - c     = {} (f)", f_text);
-    // println!("expected  = 676467453392982277424361019810585360331722557952");
+    println!("expected  = 676467453392982277424361019810585360331722557952");
     println!("bbb_text  : {}", bbb_text);
     let g_num = subtract(&f_num, &bbb_num);
     let g_text = to_string(&g_num);
@@ -125,30 +125,32 @@ fn subtract(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
 
     // 下の桁から計算。
     let short_len = cmp::min(a_num.len(), b_num.len());
-    let mut cumulus = 0;
+    let mut bollow = false;
     for column in 0..short_len {
+        let pre_bollow = bollow;
         let mut long_n = if column < long_num.len() {long_num[column]} else {0};
         let short_n = if column < short_num.len() {short_num[column]} else {0};
 
         // 下の桁が、前借りしたせいで long_n様の数が 1 減ることになるとはな☆（＾～＾）
-        if cumulus < 0 {
-            long_n += cumulus;
-            cumulus = 0;
+        let mut carry_payment = 0;
+        if pre_bollow {
+            carry_payment = -1;
         }
 
         // 各桁は 絶対値にして計算する。
         // 長い方から、短い方を引く。
-        let c = if long_n < short_n {
+        let mut carry_debt = 0;
+        if (long_n.abs()+carry_payment) < short_n {
             // 引けなければ、上の桁から 1 を前借りして１０を足す☆（＾～＾）
-            let c = (10 + long_n.abs()) - short_n.abs();
-            cumulus = -1;
-            c
+            carry_debt = 10;
+            bollow = true;
         } else {
-            let c = (long_n.abs()) - short_n.abs();
-            c
+            bollow = false;
         };
 
-        // println!("{} = {} - {}", c, long_n.abs(), short_n.abs());
+        let c = carry_payment + carry_debt + long_n.abs() - short_n.abs();
+        println!("{} = {:2} + {:2} + {} - {}", c, carry_payment, carry_debt, long_n.abs(), short_n.abs());
+
         vec.push(c);
     }
 
@@ -158,13 +160,25 @@ fn subtract(a_num:&Vec<i8>, b_num:&Vec<i8>) -> Vec<i8> {
         let mut long_n = long_num[column];
 
         // 下の桁が、前借りしたせいで long_n様の数が 1 減ることになるとはな☆（＾～＾）
-        if cumulus < 0 {
-            long_n += cumulus;
-            // cumulus = 0;
+        if bollow {
+            long_n -= 1;
         }
 
-        // println!("L {}", long_n);
+        if long_n < 0 {
+            // まだ借りる☆（＾～＾）
+            long_n += 10;
+        } else {
+            // チャラ☆（＾～＾）
+            bollow = false;
+        }
+
+        println!("L {}", long_n);
         vec.push(long_n);
+    }
+
+    if bollow {
+        // TODO ……☆（＾～＾）？
+        println!("CARRY -1 ……☆（＾～＾）？");
     }
 
     vec
