@@ -13,6 +13,7 @@
 extern crate math2019_03_11;
 
 use math2019_03_11::*;
+use math2019_03_11::handy_number::*;
 
 /// Test a subtract.
 fn main()
@@ -25,13 +26,13 @@ fn main()
     // タイトル画面のような感じ☆（＾～＾）
     println!("\n{} - {}",a_text, b_text);
 
-    let a_num = to_handy_number(true, a_text);
-    let b_num = to_handy_number(true, b_text);
+    let a_num = HandyNumber::create(true, a_text);
+    let b_num = HandyNumber::create(true, b_text);
 
     // a - b ☆（＾～＾）
     println!("\nLet's a - b ☆（＾～＾）");
-    let c_num = subtract(&a_num, &b_num);
-    let (positive_sign, c_text) = to_string(&c_num);
+    let c_num = a_num.subtract(&b_num);
+    let (positive_sign, c_text) = c_num.to_string();
     println!("a - b     = {}{} (c)", to_sign_string(positive_sign) ,c_text);
 
 }

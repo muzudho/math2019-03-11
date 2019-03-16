@@ -1,107 +1,6 @@
-mod handy_number;
+pub mod handy_number;
 
-use std::cmp;
 use handy_number::*;
-
-
-// 桁がでかいので、数字列のまま引き算するぜ☆（＾～＾）
-pub fn subtract(a_num:&HandyNumber, b_num:&HandyNumber) -> HandyNumber {
-
-    // 桁数がでかい方がえらい☆（＾～＾）
-    let mut swapping = false;
-    let long_num;
-    let short_num;
-    if a_num.len() < b_num.len() {
-        long_num = b_num;
-        short_num = a_num;
-        swapping = true;
-    } else if a_num.len() > b_num.len() {
-        long_num = a_num;
-        short_num = b_num;
-    } else {
-        let len = a_num.len();
-        if a_num.get_figure(len-1) < b_num.get_figure(len-1) {
-            long_num = b_num;
-            short_num = a_num;
-            swapping = true;
-        } else {
-            long_num = a_num;
-            short_num = b_num;
-        }
-    }
-    /*
-    let long_text = to_string(long_num);
-    let short_text = to_string(short_num);
-    println!("long_text  = {}", long_text);
-    println!("short_text = {}", short_text);
-     */
-
-    let mut vec = Vec::new();
-
-    // 下の桁から計算。
-    let short_len = cmp::min(a_num.len(), b_num.len());
-    let mut bollow = false;
-    for column in 0..short_len {
-        let pre_bollow = bollow;
-        let mut long_n = if column < long_num.len() {long_num.get_figure(column)} else {0};
-        let short_n = if column < short_num.len() {short_num.get_figure(column)} else {0};
-
-        // 下の桁が、前借りしたせいで long_n様の数が 1 減ることになるとはな☆（＾～＾）
-        let mut carry_payment = 0;
-        if pre_bollow {
-            carry_payment = -1;
-        }
-
-        // 各桁は 絶対値にして計算する。
-        // 長い方から、短い方を引く。
-        let mut carry_debt = 0;
-        if (long_n.abs()+carry_payment) < short_n {
-            // 引けなければ、上の桁から 1 を前借りして１０を足す☆（＾～＾）
-            carry_debt = 10;
-            bollow = true;
-        } else {
-            bollow = false;
-        };
-
-        let c = carry_payment + carry_debt + long_n.abs() - short_n.abs();
-        println!("{} = {:2} + {:2} + {} - {}", c, carry_payment, carry_debt, long_n.abs(), short_n.abs());
-
-        vec.push(c);
-    }
-
-    // 大きな桁の残ってる桁を最後に付けろだぜ☆（＾～＾）
-    let long_len = cmp::max(a_num.len(), b_num.len());
-    for column in short_len..long_len {
-        let mut long_n = long_num.get_figure(column);
-
-        // 下の桁が、前借りしたせいで long_n様の数が 1 減ることになるとはな☆（＾～＾）
-        if bollow {
-            long_n -= 1;
-        }
-
-        if long_n < 0 {
-            // まだ借りる☆（＾～＾）
-            long_n += 10;
-        } else {
-            // チャラ☆（＾～＾）
-            bollow = false;
-        }
-
-        println!("L {}", long_n);
-        vec.push(long_n);
-    }
-
-    if bollow {
-        // TODO ……☆（＾～＾）？
-        println!("CARRY -1 ……☆（＾～＾）？");
-    }
-
-    // スワッピングしてたら、符号はマイナスだぜ☆（＾～＾）
-    HandyNumber {
-        positive: !swapping,
-        numbers: vec,
-    }
-}
 
 // 桁がでかいので、文字列にして返すぜ☆（*＾～＾*）
 pub fn accumulate(a_sum:&Vec<i32>) -> String {
@@ -147,33 +46,6 @@ pub fn sum(a_index:&Vec<i8>, a_kuku:&HandyNumber, capacity:usize) -> Vec<i32> {
     vec
 }
 
-// 掛け算☆（＾～＾）
-pub fn multiplied_by(a_num:&HandyNumber, b_num:&HandyNumber) -> HandyNumber {
-    // 何やってるか見たいときはプリントしろだぜ☆（＾～＾）
-    print!("   ");
-    for column in 0..b_num.len() {
-        print!("{:>3}", b_num.get_figure(b_num.len()-column-1));
-    }
-    println!();
-
-    let mut vec = Vec::new();
-    for row in 0..a_num.len() {
-        print!("{:>3}", a_num.get_figure(row));
-        for column in 0..b_num.len() {
-            let n = a_num.get_figure(row) * b_num.get_figure(b_num.len()-column-1);
-            vec.push(n);
-            print!("{:>3}", n);
-        }
-        println!();
-    }
-    println!();
-
-    HandyNumber {
-        positive: !(a_num.positive ^ a_num.positive),
-        numbers: vec,
-    }
-}
-
 pub fn create_index(a_num:&HandyNumber, b_num:&HandyNumber) -> Vec<i8> {
     // 何やってるか見たいときはプリントしろだぜ☆（＾～＾）
     /*
@@ -196,32 +68,6 @@ pub fn create_index(a_num:&HandyNumber, b_num:&HandyNumber) -> Vec<i8> {
     }
     // println!();
     vec
-}
-
-// 数字の一列を、文字列にして返すぜ☆（*＾～＾*） 符号は別にして返す☆（＾ｑ＾）
-pub fn to_string(a_num:&HandyNumber) -> (bool, String) {
-    let mut number_text = "".to_string();
-
-    for num in a_num.numbers.iter() {
-        number_text = format!("{}{}", num, number_text);
-    }
-
-    (a_num.positive, number_text)
-}
-
-// 数字の一列にするぜ☆（＾～＾） 下の桁から配列に入れている☆（*＾～＾*）
-pub fn to_handy_number(positive:bool, numbers:&str) -> HandyNumber {
-    let mut vec = Vec::new();
-    for number_char in numbers.chars().rev() {
-        let num: i8 = number_char.to_string().parse().unwrap();
-        vec.push(num);
-        // println!("{}", num);
-    }
-
-    HandyNumber {
-        positive: positive,
-        numbers: vec,
-    }
 }
 
 // 偽ならマイナスの符号を返すぜ☆（＾ｑ＾）
