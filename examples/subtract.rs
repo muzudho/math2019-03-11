@@ -18,19 +18,19 @@ use math2019_03_11::handy_number::*;
 fn main()
 {
     // 文字にするぜ☆（＾～＾）
-    // マイナスは省くぜ☆（＾～＾）
-    let a_text = "637";
-    let b_text = "1492";
+    {
+        let a_text = "637";
+        let b_text = "1492";
 
-    // タイトル画面のような感じ☆（＾～＾）
-    println!("\n{} - {}",a_text, b_text);
+        // タイトル画面のような感じ☆（＾～＾）
+        println!("\n{} - {}",a_text, b_text);
 
-    let a_num = HandyNumber::create(true, a_text);
-    let b_num = HandyNumber::create(true, b_text);
+        let a_num = HandyNumber::create(true, a_text);
+        let b_num = HandyNumber::create(true, b_text);
 
-    // a - b ☆（＾～＾）
-    println!("\nLet's a - b ☆（＾～＾）");
-    let c_num = a_num.subtract(&b_num);
-    println!("a - b     = {} (c)", c_num.to_string());
-
+        // a - b ☆（＾～＾）
+        println!("\nLet's a - b ☆（＾～＾）");
+        let c_num = a_num.subtract(&b_num);
+        println!("a - b     = {} (c)", c_num.to_string());
+    }
 }

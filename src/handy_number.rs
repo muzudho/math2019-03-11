@@ -15,6 +15,13 @@ impl HandyNumber {
         }
     }
 
+    pub fn clone(source:&HandyNumber) -> HandyNumber {
+        HandyNumber {
+            positive: source.positive,
+            numbers: source.numbers.clone(),
+        }
+    }
+
     // 数字の一列にするぜ☆（＾～＾） 下の桁から配列に入れている☆（*＾～＾*）
     pub fn create(positive_sign:bool, numbers:&str) -> HandyNumber {
         let mut vec = Vec::new();
@@ -190,26 +197,35 @@ impl HandyNumber {
         }
     }
 
-    // 足し算☆（＾～＾）
-    // 正＋正　に対応☆（＾～＾）
-    pub fn add(&self, b_num:&HandyNumber) -> HandyNumber {
+    fn add_routine(a_number:&HandyNumber, b_number:&HandyNumber) -> HandyNumber {
+        let mut a_num = HandyNumber::clone(a_number);
+        let mut b_num = HandyNumber::clone(b_number);
+
+        // 左項、右項がともに負の場合は、左右反転させようぜ☆（＾～＾）
+        let flip_horizontal = if !a_num.positive && !b_num.positive {
+            a_num.positive = true;
+            b_num.positive = true;
+            true
+        } else {
+            false
+        };
 
         // 桁数がでかい方が左項☆（＾～＾）
         let long_num;
         let short_num;
-        if self.len() < b_num.len() {
-            long_num = b_num;
-            short_num = &self;
-        } else if self.len() > b_num.len() {
-            long_num = &self;
+        if a_num.len() < b_num.len() {
+            long_num = &b_num;
+            short_num = &a_num;
+        } else if a_num.len() > b_num.len() {
+            long_num = &a_num;
             short_num = &b_num;
         } else {
-            let len = &self.len();
-            if self.get_figure(len-1) < b_num.get_figure(len-1) {
-                long_num = b_num;
-                short_num = &self;
+            let len = a_num.len();
+            if a_num.get_figure(len-1) < b_num.get_figure(len-1) {
+                long_num = &b_num;
+                short_num = &a_num;
             } else {
-                long_num = &self;
+                long_num = &a_num;
                 short_num = &b_num;
             }
         }
@@ -223,7 +239,7 @@ impl HandyNumber {
         let mut vec = Vec::new();
 
         // 下の桁から計算。
-        let short_len = cmp::min(self.len(), b_num.len());
+        let short_len = cmp::min(a_num.len(), b_num.len());
         let mut carry_up = false;
         for column in 0..short_len {
             let pre_carry_up = carry_up;
@@ -251,7 +267,7 @@ impl HandyNumber {
         }
 
         // 大きな桁の残ってる桁を最後に付けろだぜ☆（＾～＾）
-        let long_len = cmp::max(self.len(), b_num.len());
+        let long_len = cmp::max(a_num.len(), b_num.len());
         for column in short_len..long_len {
             let pre_carry_up = carry_up;
             let mut long_n = long_num.get_figure(column);
@@ -280,10 +296,22 @@ impl HandyNumber {
             println!("CARRY UP……☆（＾～＾）？");
         }
 
-        // スワッピングしてたら、符号はマイナスだぜ☆（＾～＾）
+        // 左右反転させてたら、元に戻そうぜ☆（＾～＾）
+        let result_positive_sign = if flip_horizontal {
+            false
+        } else {
+            true
+        };
+
         HandyNumber {
-            positive: true,
+            positive: result_positive_sign,
             numbers: vec,
         }
+    }
+
+    // 足し算☆（＾～＾）
+    // 正＋正　に対応☆（＾～＾）
+    pub fn add(&self, b_num:&HandyNumber) -> HandyNumber {
+        HandyNumber::add_routine(&self, b_num)
     }
 }
