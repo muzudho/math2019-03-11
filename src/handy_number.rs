@@ -236,14 +236,16 @@ impl HandyNumber {
                 carry_value = 1;
             };
 
-            let c = carry_value + long_n.abs() + short_n.abs();
-            println!("{} = {:2} + {} + {}", c, carry_value, long_n.abs(), short_n.abs());
-
-            if 9 < c {
+            let b = carry_value + long_n.abs() + short_n.abs();
+            if 9 < b {
                 carry_up = true;
             } else {
                 carry_up = false;
             }
+            let c = (b)%10;
+
+            println!("{:1}, {:>2} = {:>2} + {:>2} + {:>2}", if carry_up {1}else{0}, c, carry_value, long_n.abs(), short_n.abs());
+
 
             vec.push(c);
         }
@@ -260,16 +262,17 @@ impl HandyNumber {
                 carry_value = 1;
             };
 
-            let c = carry_value + long_n;
-            println!("L {} = {} + {}", c, carry_value, long_n);
-            vec.push(c);
-
-            if 9 < c {
+            let b = carry_value + long_n;
+            if 9 < b {
                 // また繰り上げ☆（＾～＾）
             } else {
                 // チャラ☆（＾～＾）
                 carry_up = false;
             }
+            let c = (b)%10;
+            println!("{:1}, {:>2} = {:>2} + {:>2}", if carry_up {1}else{0}, c, carry_value, long_n);
+            vec.push(c);
+
         }
 
         if carry_up {

@@ -24,6 +24,11 @@ fn main()
     // タイトル画面のような感じ☆（＾～＾）
     println!("\n{} + {}", a_num.to_string(), b_num.to_string());
 
+    // 筆算の形に☆（＾～＾）
+    println!("\n  {:>10}", a_num.to_string());
+    println!("+ {:>10}", b_num.to_string());
+    println!("--------------");
+
     // a + b ☆（＾～＾）
     println!("\nLet's a + b ☆（＾～＾）");
     let c_num = a_num.add(&b_num);
