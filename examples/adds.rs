@@ -17,10 +17,8 @@ use math2019_03_11::handy_number::*;
 /// Test a adds.
 fn main()
 {
-    // 正＋正のケース☆（＾～＾）
     {
-        // a + b ☆（＾～＾）
-        println!("\nLet's positive a + positive b ☆（＾～＾）");
+        println!("\n(0) Let's |a|≦|b|, 0≦a, 0≦b ☆（＾～＾）");
 
         // 文字列で絶対値を指定するぜ☆（＾～＾）
         let a_num = HandyNumber::create(true, "637");
@@ -39,10 +37,27 @@ fn main()
         println!("Expected    2129.");
     }
 
-    // 負＋負のケース☆（＾～＾）
     {
-        // a + b ☆（＾～＾）
-        println!("\nLet's negative a + negative b ☆（＾～＾）");
+        println!("\n(1) Let's |a|≦|b|, 0≦a, b＜0 ☆（＾～＾）");
+
+        let a_num = HandyNumber::create(true, "637");
+        let b_num = HandyNumber::create(false, "1492");
+
+        // タイトル画面のような感じ☆（＾～＾）
+        println!("\n{} + {}", a_num.to_string(), b_num.to_string());
+
+        // 筆算の形に☆（＾～＾）
+        println!("\n  {:>10}", a_num.to_string());
+        println!("+ {:>10}", b_num.to_string());
+        println!("--------------");
+
+        let c_num = a_num.add(&b_num);
+        println!("a + b     = {} (c)", c_num.to_string());
+        println!("Expected    -855.");
+    }
+
+    {
+        println!("\n(2) Let's |a|≦|b|, a＜0, b＜0 ☆（＾～＾）");
 
         let a_num = HandyNumber::create(false, "637");
         let b_num = HandyNumber::create(false, "1492");
@@ -60,10 +75,27 @@ fn main()
         println!("Expected    -2129.");
     }
 
-    // 正＋負のケース☆（＾～＾）
     {
-        // a + b ☆（＾～＾）
-        println!("\nLet's positive a + negative b ☆（＾～＾）");
+        println!("\n(3) Let's |a|≦|b|, a＜0, 0≦b ☆（＾～＾）");
+
+        let a_num = HandyNumber::create(false, "637");
+        let b_num = HandyNumber::create(true, "1492");
+
+        // タイトル画面のような感じ☆（＾～＾）
+        println!("\n{} + {}", a_num.to_string(), b_num.to_string());
+
+        // 筆算の形に☆（＾～＾）
+        println!("\n  {:>10}", a_num.to_string());
+        println!("+ {:>10}", b_num.to_string());
+        println!("--------------");
+
+        let c_num = a_num.add(&b_num);
+        println!("a + b     = {} (c)", c_num.to_string());
+        println!("Expected     855.");
+    }
+
+    {
+        println!("\nLet's |a|≧|b|, 0≦a, b＜0 ☆（＾～＾）");
 
         let a_num = HandyNumber::create(true, "1492");
         let b_num = HandyNumber::create(false, "637");

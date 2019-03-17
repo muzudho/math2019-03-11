@@ -311,26 +311,38 @@ impl HandyNumber {
         let flip_horizontal = if !a_num.positive && !b_num.positive {
             a_num.positive = true;
             b_num.positive = true;
+            println!("Flip horizontal.");
             true
         } else {
             false
         };
 
         // 左項、右項の符号が異なれば、補数を使うぜ☆（＾～＾）
-        let use_complement = if a_num.positive != b_num.positive {
-            true
+        let (use_complement, absolute_flip_horizontal) = if a_num.positive != b_num.positive {
+            // 右項の方が桁数が長く、かつ右項が負なら、 absolute flip horizontal する。
+            println!("Absolute flip horizontal.");
+            (true, a_num.len() < b_num.len() && !b_num.positive)
         } else {
-            false
+            (false, false)
         };
+
+        if absolute_flip_horizontal {
+            // 符号を反転させる。
+            a_num.positive = !a_num.positive;
+            b_num.positive = !b_num.positive;
+        }
 
         // 桁数がでかい方が左項☆（＾～＾）
         let vec = if a_num.len() < b_num.len() {
+            println!("Swap sequence.");
             HandyNumber::add_routine2(&mut b_num, &mut a_num, use_complement)
-        } else if a_num.len() > b_num.len() {
+        } else if b_num.len() < a_num.len() {
             HandyNumber::add_routine2(&mut a_num, &mut b_num, use_complement)
         } else {
+            // 長さが同じなら、最上位桁の数で比較。
             let len = a_num.len();
             if a_num.get_figure(len-1) < b_num.get_figure(len-1) {
+                println!("Swap sequence.");
                 HandyNumber::add_routine2(&mut b_num, &mut a_num, use_complement)
             } else {
                 HandyNumber::add_routine2(&mut a_num, &mut b_num, use_complement)
@@ -338,10 +350,18 @@ impl HandyNumber {
         };
 
         // 左右反転させてたら、元に戻そうぜ☆（＾～＾）
-        let result_positive_sign = if flip_horizontal {
+        let mut result_positive_sign = if flip_horizontal {
+            println!("Reverse flip horizontal.");
             false
         } else {
             true
+        };
+
+        // 絶対値で左右反転させてたら、結果の符号を反転させるぜ☆（*＾～＾*）
+        if absolute_flip_horizontal {
+            print!("Reverse absolute flip horizontal: {} --> ", result_positive_sign);
+            result_positive_sign = !result_positive_sign;
+            println!("{}.", result_positive_sign);
         };
 
         HandyNumber {
