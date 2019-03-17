@@ -59,4 +59,25 @@ fn main()
         println!("a + b     = {} (c)", c_num.to_string());
         println!("Expected    -2129.");
     }
+
+    // 正＋負のケース☆（＾～＾）
+    {
+        // a + b ☆（＾～＾）
+        println!("\nLet's positive a + negative b ☆（＾～＾）");
+
+        let a_num = HandyNumber::create(true, "1492");
+        let b_num = HandyNumber::create(false, "637");
+
+        // タイトル画面のような感じ☆（＾～＾）
+        println!("\n{} + {}", a_num.to_string(), b_num.to_string());
+
+        // 筆算の形に☆（＾～＾）
+        println!("\n  {:>10}", a_num.to_string());
+        println!("+ {:>10}", b_num.to_string());
+        println!("--------------");
+
+        let c_num = a_num.add(&b_num);
+        println!("a + b     = {} (c)", c_num.to_string());
+        println!("Expected     855.");
+    }
 }
