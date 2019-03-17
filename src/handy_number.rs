@@ -319,17 +319,31 @@ impl HandyNumber {
 
         // 左項、右項の符号が異なれば、補数を使うぜ☆（＾～＾）
         let (use_complement, absolute_flip_horizontal) = if a_num.positive != b_num.positive {
-            // 右項の方が桁数が長く、かつ右項が負なら、 absolute flip horizontal する。
-            println!("Absolute flip horizontal.");
-            (true, a_num.len() < b_num.len() && !b_num.positive)
+            let absolute_flip_horizontal = if a_num.len() < b_num.len() && !b_num.positive {
+                // 右項の方が桁数が長く、かつ右項が負なら、 absolute flip horizontal する。
+                true
+            } else if b_num.len() < a_num.len() && !a_num.positive {
+                // 左項の方が桁数が長く、かつ左項が負なら、 absolute flip horizontal する。
+                true
+            } else {
+                false
+            };
+
+            (true, absolute_flip_horizontal)
         } else {
             (false, false)
         };
 
         if absolute_flip_horizontal {
-            // 符号を反転させる。
+            // 符号を 全とっかえ させる。
+            println!("Absolute flip horizontal.");
             a_num.positive = !a_num.positive;
             b_num.positive = !b_num.positive;
+        }
+
+        println!("a.positive: {}, b.positive: {}.", a_num.positive, b_num.positive);
+        if use_complement {
+            println!("Use complement.");
         }
 
         // 桁数がでかい方が左項☆（＾～＾）
